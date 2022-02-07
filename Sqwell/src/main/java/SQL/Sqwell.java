@@ -25,6 +25,8 @@ import Misc.MouseManager;
 import Misc.SimpleWindow;
 import Rendering.Graphics;
 
+// THIS IS THE OLD VERSION, DO NOT RUN THIS ONE
+// ONLY KEPT FOR REFRENCE 
 public class Sqwell implements SimpleWindowEvent, ActionListener {
 	// SQL Information
 	// TODO Move to config file on GitHub ignore
@@ -39,7 +41,7 @@ public class Sqwell implements SimpleWindowEvent, ActionListener {
 	
 	Map<String, JMenuItem> menuItemMap = new HashMap<String, JMenuItem>();
 	
-	int selectedTable = -1;
+	int selectedTable = -1, mode = 0;
 	
 	// TODO Consolidate all information in to an object table
 	ArrayList<String> table = new ArrayList<String>();
@@ -79,6 +81,11 @@ public class Sqwell implements SimpleWindowEvent, ActionListener {
 		
 		menuItem = new JMenuItem("Exit");
 		menuItem.setToolTipText("Exit application");
+		menuItem.addActionListener(this);
+		menuBar.add(menuItem);
+		menuItemMap.put(menuItem.getText(), menuItem);
+		
+		menuItem = new JMenuItem("Switch");
 		menuItem.addActionListener(this);
 		menuBar.add(menuItem);
 		menuItemMap.put(menuItem.getText(), menuItem);
@@ -127,11 +134,11 @@ public class Sqwell implements SimpleWindowEvent, ActionListener {
 		width = g.width; height = g.height;
 		g.setFont( font );
 		
-//		renderViewer(g);
-		editor.renderEditor( g );
+		switch(mode) {
+			case 0:renderViewer(g);break;
+			case 1:editor.renderEditor( g );;break;
+		}
 	}
-	
-	
 	
 	public void renderViewer(Graphics g) {
 		// Table Explorer
@@ -309,6 +316,10 @@ public class Sqwell implements SimpleWindowEvent, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == menuItemMap.get("Exit")) {
 			System.exit(0);
+		}
+		if(e.getSource() == menuItemMap.get("Switch")) {
+			mode += 1;
+			if(mode >= 2) mode = 0;
 		}
 		
 		if(e.getSource() == menuItemMap.get("Run Query")) {
