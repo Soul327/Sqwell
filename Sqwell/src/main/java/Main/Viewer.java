@@ -118,8 +118,13 @@ public class Viewer {
 			
 			dx = horizontalScroll + width + 5;
 			dy = z++*g.fontSize + verticalScroll + headNameHeight;
-			if(dy > 0 && dy - g.fontSize < g.height) // Check if it's rendering on screen
-				g.drawOutlinedString(str, dx, dy);
+			if(dy > 0 && dy - g.fontSize < g.height) {// Check if it's rendering on screen
+				Color color = Color.white;
+				if( Mat.isInRange(mx, dx, g.width) && Mat.isInRange(my, dy-g.fontSize, dy) ) {
+					color = Color.gray;
+				}
+				g.drawOutlinedString(str, dx, dy, color, Color.black);
+			}
 		}
 		
 		// Draw head names
