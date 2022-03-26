@@ -29,6 +29,7 @@ import Rendering.Graphics;
 // ONLY KEPT FOR REFRENCE 
 public class Sqwell implements SimpleWindowEvent, ActionListener {
 	// SQL Information
+	
 	// TODO Move to config file on GitHub ignore
 	String address = "162.144.12.171";
 	String username = "everying_idiot";

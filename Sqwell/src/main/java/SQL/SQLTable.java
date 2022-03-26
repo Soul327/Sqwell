@@ -7,7 +7,10 @@ public class SQLTable {
 	ArrayList<String> columnNames = new ArrayList<String>();
 	ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 	public int getAmountOfRows() { return data.size(); }
-	public int getAmountOfColumns() { return data.get(0).size(); }
+	public int getAmountOfColumns() { 
+//		return (data != null && data.size() > 0)? data.get(0).size() : 0;
+		return columnNames.size();
+	}
 	
 	public SQLTable(String name) {
 		this.name = name;
