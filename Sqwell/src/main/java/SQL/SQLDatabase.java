@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class SQLDatabase {
 	String address, username, password;
-	public String database = "everying_main";
+	public String database = "";
 	Statement stmt = null;
 	Connection con = null;
 	
@@ -61,6 +61,7 @@ public class SQLDatabase {
 			for(String key:tables.keySet()) loadTable( key );
 		} catch (SQLException e) {}
 	}
+	
 	public void loadTable(String tableName) {
 		
 		try {

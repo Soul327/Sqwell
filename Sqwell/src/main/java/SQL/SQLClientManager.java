@@ -27,6 +27,10 @@ public class SQLClientManager {
 		} catch (SQLException e) { e.printStackTrace(); }
 	}
 	
+	public void dump() {
+		databases = new ArrayList<SQLDatabase>();
+	}
+	
 	public void add(SQLDatabase db) { databases.add( db ); }
 	public SQLDatabase get(int x) { return databases.get( x ); }
 }

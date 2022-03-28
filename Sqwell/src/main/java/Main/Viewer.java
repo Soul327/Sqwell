@@ -6,6 +6,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import Misc.KeyManager;
 import Misc.Mat;
 import Misc.MouseManager;
@@ -89,11 +92,11 @@ public class Viewer {
 	}
 	
 	public void renderTableData(Graphics g, SQLDatabase db, String tbn) {
-		int z = 1; // This value stores the amount of rows printed to the screen, this is used for drawing reasons
+		int line = 1; // This value stores the amount of rows printed to the screen, this is used for drawing reasons
 		double headNameHeight = g.fontSize * 1.5;
 		// Load and show tables data
 		SQLTable table = db.tables.get(tbn);
-		ArrayList<String> cn = table.getColumnNames();
+		ArrayList<String> columnNames = table.getColumnNames();
 		
 		// Generate space amount for columns
 		int[] spaceForColumns = new int[table.getAmountOfColumns()];
@@ -105,32 +108,53 @@ public class Viewer {
 				if( spaceForColumns[c] <  len ) spaceForColumns[c] = len;
 			}
 		
-		for(int x=0;x<cn.size();x++) {
-			int len = cn.get(x).length() + 2; // Add extra for space between, so the columns are not touching
+		for(int x=0;x<columnNames.size();x++) {
+			int len = columnNames.get(x).length() + 2; // Add extra for space between, so the columns are not touching
 			if( spaceForColumns[x] <  len ) spaceForColumns[x] = len;
 		}
 		
+		// Render rows
 		for(int c=0;c<table.getAmountOfRows();c++) {
 			ArrayList<String> row = table.getRow(c);
-			String str = "";
-			for(int a=0;a<row.size();a++)
-				str += String.format("%-"+spaceForColumns[a]+"s", table.getRow(c).get(a));
 			
-			dx = horizontalScroll + width + 5;
-			dy = z++*g.fontSize + verticalScroll + headNameHeight;
-			if(dy > 0 && dy - g.fontSize < g.height) {// Check if it's rendering on screen
-				Color color = Color.white;
-				if( Mat.isInRange(mx, dx, g.width) && Mat.isInRange(my, dy-g.fontSize, dy) ) {
-					color = Color.gray;
+			final double spaceForChar = 5;
+			double sfc = 0;
+			for(int a = 0;a < row.size(); a++) {
+				String str = row.get(a); // String to print
+				
+				
+				dy = line*g.fontSize + verticalScroll + headNameHeight; // Temp var for y print loc
+				if(!(dy > 0 && dy - g.fontSize < g.height)) continue;// Check if it's rendering on screen vertically, if it is not continue to the next row
+				
+				dx = horizontalScroll + width + 5 + sfc; // Temp var for x print loc
+				if(!(true)) continue;// Check if it's rendering on screen horizontally, if it is not continue to the next row
+				
+				double dh = g.fontSize; // Temp height of string
+				
+				// This solution is dumb and inefficient this should be fixed for a better run time
+				double dw = g.getStringLength( String.format("%"+spaceForColumns[a]+"s", " ") ); // Temp width of string
+				sfc +=  dw;
+				
+				// Check if mouse is on current string
+				boolean mouseOnStr = ( Mat.isInRange(mx, dx, dx + dw) && Mat.isInRange(my, dy-g.fontSize, dy) );
+				
+				Color color = (mouseOnStr)? ((MouseManager.leftPressed)?Color.gray:Color.lightGray): Color.white;
+				
+				if(MouseManager.leftPressed && mouseOnStr) {
+					String query = String.format("UPDATE %s SET hits=1 WHERE id=", "");
+					System.out.println( row );
 				}
+				
 				g.drawOutlinedString(str, dx, dy, color, Color.black);
 			}
+			line++; // Add to go to nextRow
 		}
 		
 		// Draw head names
+		// This has to be on bottom to render on top of the screen
 		String str = "";
-		for(int x=0;x<cn.size();x++)
-			str += String.format("%-"+spaceForColumns[x]+"s", cn.get(x));
+		for(int x=0;x<columnNames.size();x++)
+			str += String.format("%-"+spaceForColumns[x]+"s", columnNames.get(x));
 		dx = horizontalScroll + width + 5;
 		dy = g.fontSize;
 		

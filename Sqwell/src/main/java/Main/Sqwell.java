@@ -32,22 +32,15 @@ public class Sqwell implements SimpleWindowEvent, MouseWheelMovedEvent{
 		window.addSimpleWindowEvent(this);
 		window.name = "Sqwell - An SQL client";
 		MouseManager.addMouseWheelEvent(this);
+		window.maxFPS = 30;
 		window.start();
 		
-		// Setup databases
-		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_main") );
-		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_updawg") );
-		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_generators") );
-		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_arayna") );
-		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_omegaball") );
-		
-		cm.openConnection();
+		loadConfig();
 	}
 	
 	public void tar(Graphics g) {
 		g.setFont( Sqwell.font );
-		if(KeyManager.keyRelease(KeyEvent.VK_P)) bufferedImageType++;
-		if(KeyManager.keyRelease(KeyEvent.VK_O)) bufferedImageType--;
+		if(KeyManager.keyRelease(KeyEvent.VK_F5)) loadConfig();
 		viewer.render(g, 0, 0);
 		
 		g.setColor(255,255,255);
@@ -58,6 +51,22 @@ public class Sqwell implements SimpleWindowEvent, MouseWheelMovedEvent{
 	
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		viewer.mouseWheelMoved(e);
+	}
+	
+	/* Load config file, this may be a lot of code */
+	public void loadConfig() {
+		// Set all values to default
+//		cm = new SQLClientManager();
+		cm.dump();
+		
+		// Setup databases
+	//	cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_main") );
+	//	cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_updawg") );
+	//	cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_generators") );
+	//	cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_arayna") );
+		cm.add( new SQLDatabase("162.144.12.171", "everying_idiot", "password", "everying_omegaball") );
+		
+		cm.openConnection();
 	}
 	
 	public static void main(String args[]) { new Sqwell(); }

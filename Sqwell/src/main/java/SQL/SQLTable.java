@@ -32,6 +32,12 @@ public class SQLTable {
 		return data.get(row).get(column);
 	}
 	
+	
+	
+	public String getUniqueKey() {
+		return "<UNIQUE KEY>";
+	}
+	
 	public ArrayList<String> getColumnNames() {
 		return columnNames;
 	}
